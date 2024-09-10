@@ -63,79 +63,18 @@ def display_results(lines_with_keywords):
     result_window = tk.Toplevel()
     result_window.title("Lines Containing 'test' or 'capstone'")
 
-    # Instruction label to let the user know the lines are clickable
-    instruction_label = tk.Label(result_window, text="Click a line below to get more information.")
-    instruction_label.pack(pady=5)
-
-    # Scrollable text area for showing lines
-    text_area = scrolledtext.ScrolledText(result_window, wrap=tk.WORD, width=80, height=20)
-    text_area.pack(pady=10, padx=10)
-
-    # Add a tag to highlight the hovered line
-    text_area.tag_configure("highlight", background="yellow")
-
-    # Insert the lines into the text widget with tags
-    for line_num, keyword, line in lines_with_keywords:
-        text_area.insert(tk.END, f"Line {line_num}: {line}\n", keyword)
-
-    text_area.configure(state='disabled')  # Make the text area read-only
-
-    # Store the current highlighted line index
-    current_line_idx = None
-
-    # Highlight the line the cursor is hovering over
-    def on_hover(event):
-        nonlocal current_line_idx
-        text_area.configure(state='normal')
-
-        # Get the line index at the cursor position
-        line_idx = text_area.index(f"@{event.x},{event.y}").split(".")[0]
-
-        if line_idx != current_line_idx:
-            # Remove highlight from the previous line
-            if current_line_idx:
-                text_area.tag_remove("highlight", f"{current_line_idx}.0", f"{current_line_idx}.end")
-
-            # Highlight the new line
-            current_line_idx = line_idx
-            text_area.tag_add("highlight", f"{line_idx}.0", f"{line_idx}.end")
-
-        text_area.configure(state='disabled')
-
-    # Bind hovering over text to show the highlight
-    text_area.bind("<Motion>", on_hover)
-
-    # Bind clicking on the text to show the appropriate message based on the keyword
-    def on_click(event):
-        # Get the line index at the cursor position
-        line_idx = text_area.index(f"@{event.x},{event.y}").split(".")[0]
-        line_text = text_area.get(f"{line_idx}.0", f"{line_idx}.end").strip()
-
-        # Check if the line contains "test" or "capstone"
-        if "test" in line_text.lower():
-            show_remove_message()
-        elif "capstone" in line_text.lower():
-            show_capstone_message()
-
-    # Bind clicking on the text area to the on_click function
-    text_area.bind("<Button-1>", on_click)
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-# Create a basic GUI window
-def create_gui():
-    root = tk.Tk()
-    root.title("Word Finder")
-
-    label = tk.Label(root,
-                     text="Click the button to select a text file and search for the words 'test' and 'capstone'.")
-    label.pack(pady=10)
-
-    button = tk.Button(root, text="Select File", command=select_file_and_display_lines)
-    button.pack(pady=10)
-
-    root.geometry("600x200")
-    root.mainloop()
+def print_hi(name):
+    # Use a breakpoint in the code line below to debug your script.
+    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-if __name__ == "__main__":
-    create_gui()
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    print_hi('PyCharm')
+    print_hi('C Test 1')
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
