@@ -26,7 +26,7 @@ def select_file_and_display_lines():
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)
-                else:
+                  else:
                     messagebox.showinfo("Result", 'No occurrences of the words "test", "capstone", or uses of "strcpy_s()" and "strcat_s()" found.')
 
         except Exception as e:
