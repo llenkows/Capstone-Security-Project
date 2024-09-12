@@ -15,15 +15,15 @@ def select_file_and_display_lines():
                 # Find lines where the words "test" or "capstone" appear
                 lines_with_keywords = []
                 for idx, line in enumerate(content):
-                    if "test" in line.lower():
-                        lines_with_keywords.append((idx + 1, "test", line.strip()))
-                    if "capstone" in line.lower():
-                        lines_with_keywords.append((idx + 1, "capstone", line.strip()))
+                    if "strncpy" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strncpy", line.strip()))
+                    if "strncat" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strncat", line.strip()))
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)
                 else:
-                    messagebox.showinfo("Result", 'No occurrences of the words "test" or "capstone" found.')
+                    messagebox.showinfo("Result", 'No security issues found.')
 
         except Exception as e:
             messagebox.showerror("Error", f"Could not open or read the file: {e}")
@@ -35,33 +35,39 @@ def open_url(url):
 
 
 # Function to display a message and a clickable link for "test"
-def show_remove_message():
+def show_strncpy_message():
     message_window = tk.Toplevel()
-    message_window.title("Remove 'test'")
+    message_window.title("strncpy() issue")
 
-    label = tk.Label(message_window, text="Please remove the word 'test' from your code.")
+    label = tk.Label(message_window, text="When using strncpy(), use the more secure strncpy_s() instead.")
     label.pack(pady=10)
 
-    link = tk.Label(message_window, text="Click here to search on Google", fg="blue", cursor="hand2")
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
     link.pack(pady=5)
 
     # Make the label a clickable link
-    link.bind("<Button-1>", lambda e: open_url("https://www.google.com"))
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
 
 
 # Function to display a message for "capstone"
-def show_capstone_message():
+def show_strncat_message():
     message_window = tk.Toplevel()
-    message_window.title("Capstone Message")
+    message_window.title("strncat() issue")
 
-    label = tk.Label(message_window, text="You've found a capstone-related line!")
+    label = tk.Label(message_window, text="When using strncat(), use the more secure strncat_s() instead.")
     label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
 
 
 # Function to display results in a new window with clickable and hoverable lines
 def display_results(lines_with_keywords):
     result_window = tk.Toplevel()
-    result_window.title("Lines Containing 'test' or 'capstone'")
+    result_window.title("Lines Containing Potential Security Vulnerabilities'")
 
     # Instruction label to let the user know the lines are clickable
     instruction_label = tk.Label(result_window, text="Click a line below to get more information.")
@@ -112,10 +118,10 @@ def display_results(lines_with_keywords):
         line_text = text_area.get(f"{line_idx}.0", f"{line_idx}.end").strip()
 
         # Check if the line contains "test" or "capstone"
-        if "test" in line_text.lower():
-            show_remove_message()
-        elif "capstone" in line_text.lower():
-            show_capstone_message()
+        if "strncpy" in line_text.lower():
+            show_strncpy_message()
+        elif "strncat" in line_text.lower():
+            show_strncat_message()
 
     # Bind clicking on the text area to the on_click function
     text_area.bind("<Button-1>", on_click)
@@ -124,10 +130,10 @@ def display_results(lines_with_keywords):
 # Create a basic GUI window
 def create_gui():
     root = tk.Tk()
-    root.title("Word Finder")
+    root.title("C Security Tester")
 
     label = tk.Label(root,
-                     text="Click the button to select a text file and search for the words 'test' and 'capstone'.")
+                     text="Click the button to select a text file and analyze your C code.")
     label.pack(pady=10)
 
     button = tk.Button(root, text="Select File", command=select_file_and_display_lines)
