@@ -19,11 +19,15 @@ def select_file_and_display_lines():
                         lines_with_keywords.append((idx + 1, "test", line.strip()))
                     if "capstone" in line.lower():
                         lines_with_keywords.append((idx + 1, "capstone", line.strip()))
+                    if "strcpy_s()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strcpy_s()", line.strip()))
+                    if "strcat_s()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strcat_s()", line.strip()))
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)
                 else:
-                    messagebox.showinfo("Result", 'No occurrences of the words "test" or "capstone" found.')
+                    messagebox.showinfo("Result", 'No occurrences of the words "test", "capstone", or uses of "strcpy_s()" and "strcat_s()" found.')
 
         except Exception as e:
             messagebox.showerror("Error", f"Could not open or read the file: {e}")
@@ -57,11 +61,24 @@ def show_capstone_message():
     label = tk.Label(message_window, text="You've found a capstone-related line!")
     label.pack(pady=10)
 
+def show_strcpy_message():
+    message_window = tk.Toplevel()
+    message_window.title("strcpy_s() Message")
+
+    label = tk.Label(message_window, text="You've found a line using strcpy_s()!")
+    label.pack(pady=10)
+
+def show_strcat_message():
+    message_window = tk.Toplevel()
+    message_window.title("strcat_s() Message")
+
+    label = tk.Label(message_window, text="You've found a line using strcat_s()!")
+    label.pack(pady=10)
 
 # Function to display results in a new window with clickable and hoverable lines
 def display_results(lines_with_keywords):
     result_window = tk.Toplevel()
-    result_window.title("Lines Containing 'test' or 'capstone'")
+    result_window.title("Lines Containing 'test', 'capstone', and use cases of strcpy_s() and strcat_s()")
 
     # Instruction label to let the user know the lines are clickable
     instruction_label = tk.Label(result_window, text="Click a line below to get more information.")
