@@ -17,6 +17,14 @@ def select_file_and_display_lines():
                         lines_with_keywords.append((idx + 1, "strncpy", line.strip()))
                     if "strncat" in line.lower():
                         lines_with_keywords.append((idx + 1, "strncat", line.strip()))
+                    if "strcpy_s()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strcpy_s()", line.strip()))
+                    if "strcat_s()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strcat_s()", line.strip()))
+                    if "strlen()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strlen()", line.strip()))
+                    if "strsafe.h" in line.lower():
+                        lines_with_keywords.append((idx + 1, "strsafe.h", line.strip()))
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)
