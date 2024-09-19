@@ -25,6 +25,8 @@ def select_file_and_display_lines():
                         lines_with_keywords.append((idx + 1, "strlen()", line.strip()))
                     if "strsafe.h" in line.lower():
                         lines_with_keywords.append((idx + 1, "strsafe.h", line.strip()))
+                    if "safestr_t" in line.lower():
+                        lines_with_keywords.append((idx + 1, "safestr_t", line.strip()))
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)

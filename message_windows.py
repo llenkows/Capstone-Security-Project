@@ -55,3 +55,10 @@ def show_strsafe_message():
 
     label = tk.Label(message_window, text="You've found a vulnerable line that uses strsafe.h!")
     label.pack(pady=10)
+
+def show_safestr_t_message():
+    message_window = tk.Toplevel()
+    message_window.title("safestr_t Message")
+
+    label = tk.Label(message_window, text="You've found a vulnerable line that uses safestr_t!")
+    label.pack(pady=10)
