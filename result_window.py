@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import scrolledtext
-from message_windows import show_strncpy_message, show_strncat_message, show_strcat_message, show_strcpy_message, show_strlen_message, show_strsafe_message
+from message_windows import (show_strncpy_message, show_strncat_message, show_strcat_message, show_strcpy_message,
+                             show_strlen_message,
+                             show_strsafe_message, show_strlen_message, show_gets_message, show_off_by_one_message,
+                             show_format_string_message)
 
 # Function to display results in a new window with clickable and hoverable lines
 def display_results(lines_with_keywords):
@@ -68,6 +71,12 @@ def display_results(lines_with_keywords):
             show_strlen_message()
         elif "strsafe" in line_text.lower():
             show_strsafe_message()
+        elif "gets(" in line_text.lower():
+            show_gets_message()
+        elif "<=" in line_text.lower() and "for" in line_text.lower():
+            show_off_by_one_message()
+        elif "printf" in line_text.lower():
+            show_format_string_message()
 
     # Bind clicking on the text area to the on_click function
     text_area.bind("<Button-1>", on_click)

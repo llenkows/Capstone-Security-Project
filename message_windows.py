@@ -55,3 +55,40 @@ def show_strsafe_message():
 
     label = tk.Label(message_window, text="You've found a vulnerable line that uses strsafe.h!")
     label.pack(pady=10)
+
+def show_gets_message():
+    message_window = tk.Toplevel()
+    message_window.title("gets Message")
+
+    label = tk.Label(message_window, text="You've found a vulnerable line that uses gets! Change to fgets() to limit "
+                                          "the message to a certain amount of characters. ")
+    label.pack(pady=10)
+
+def show_off_by_one_message():
+    message_window = tk.Toplevel()
+    message_window.title("Off-by-one issue")
+
+    label = tk.Label(message_window, text="When using <= in a loop to fill an array, there is potential for a buffer "
+                                          "overflow by one. Make sure to use either < or one number below the array "
+                                          "size.")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
+
+def show_format_string_message():
+    message_window = tk.Toplevel()
+    message_window.title("Format string issue")
+
+    label = tk.Label(message_window, text="When using a form of printf, make sure to explicitly specify the format string "
+                                          "using '%s'.")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
