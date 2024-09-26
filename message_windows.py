@@ -92,3 +92,30 @@ def show_format_string_message():
 
     # Make the label a clickable link
     link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
+
+def show_memcpy_message():
+    message_window = tk.Toplevel()
+    message_window.title("memcpy() issue")
+
+    label = tk.Label(message_window, text="Memcpy issue!")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
+
+def show_memmove_message():
+    message_window = tk.Toplevel()
+    message_window.title("memmove() issue")
+
+    label = tk.Label(message_window, text="Memmove issue!")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/why-strcpy-and-strncpy-are-not-safe-to-use/"))
+

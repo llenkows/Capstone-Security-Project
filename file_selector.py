@@ -1,6 +1,7 @@
 from tkinter import filedialog, messagebox
 from result_window import display_results
 import re
+import sys
 
 # Function to detect off-by-one errors in loops
 def detect_off_by_one_errors(content):
@@ -41,6 +42,39 @@ def detect_format_string_vulnerabilities(content):
 
     return potential_vulnerabilities
 
+
+def detect_buffer_overflow(content):
+    # Regular expressions to match potentially unsafe functions
+    unsafe_functions = [
+        r'\bgets\s*\(',  # matches gets function
+        r'\bstrcpy\s*\(',  # matches strcpy function
+        r'\bstrcat\s*\(',  # matches strcat function
+        r'\bsprintf\s*\(',  # matches sprintf function
+        r'\bscanf\s*\(',  # matches scanf function
+    ]
+
+    # Check for fixed size buffers being used with unsafe functions
+    buffer_size_pattern = r'char\s+\w+\s*\[\s*(\d+)\s*\]'
+
+    vulnerabilities = []
+
+    # Iterate over the lines in the content
+    for i, line in enumerate(content):
+        # Check for unsafe functions
+        for pattern in unsafe_functions:
+            if re.search(pattern, line):
+                vulnerabilities.append((i + 1, "Potential buffer overflow", line.strip()))
+
+        # Check for fixed size buffer declarations
+        if re.search(buffer_size_pattern, line):
+            vulnerabilities.append((i + 1, "Fixed size buffer", line.strip()))
+
+    return vulnerabilities
+
+
+
+
+
 # Function to select a file and display the lines containing potential security issues
 def select_file_and_display_lines():
     file_path = filedialog.askopenfilename(title="Select a Text File", filetypes=[("Text files", "*.txt")])
@@ -67,6 +101,10 @@ def select_file_and_display_lines():
                         lines_with_keywords.append((idx + 1, "strsafe.h", line.strip()))
                     if "gets(" in line.lower() and "fgets(" not in line.lower():
                         lines_with_keywords.append((idx + 1, "gets(", line.strip()))
+                    if "memcpy()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "memcpy()", line.strip()))
+                    if "memmove()" in line.lower():
+                        lines_with_keywords.append((idx + 1, "memmove()", line.strip()))
 
                 # Check for off-by-one errors
                 off_by_one_errors = detect_off_by_one_errors(content)
@@ -75,6 +113,13 @@ def select_file_and_display_lines():
                 # Check for format string vulnerabilities
                 format_string_vulnerabilities = detect_format_string_vulnerabilities(content)
                 lines_with_keywords.extend(format_string_vulnerabilities)
+
+                # Check for buffer overflow vulnerabilities
+                buffer_flow_vulnerabilities = detect_buffer_overflow(content)
+                lines_with_keywords.extend(buffer_flow_vulnerabilities)
+
+                # safestr_issues = check_safestr_usage(content)
+                # lines_with_keywords.extend(safestr_issues)
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)
