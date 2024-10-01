@@ -69,13 +69,5 @@ def display_results(lines_with_keywords):
         elif "strsafe" in line_text.lower():
             show_strsafe_message()
 
-        # Added buffer overflow msgs
-        elif "gets()" in line_text.lower():
-            show_gets_message()
-        elif "memcpy()" in line_text.lower():
-            show_memcpy_message()
-        elif "memmove()" in line_text.lower():
-            show_memmove_message()
-
     # Bind clicking on the text area to the on_click function
     text_area.bind("<Button-1>", on_click)
