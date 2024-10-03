@@ -3,7 +3,7 @@ from tkinter import scrolledtext
 from message_windows import (show_strncpy_message, show_strncat_message, show_strcat_message, show_strcpy_message,
                              show_strlen_message,
                              show_strsafe_message, show_strlen_message, show_gets_message, show_off_by_one_message,
-                             show_format_string_message, show_memcpy_message, show_memmove_message)
+                             show_format_string_message, show_memcpy_message, show_memmove_message, show_dynamic_query_message)
 
 # Function to display results in a new window with clickable and hoverable lines
 def display_results(lines_with_keywords):
@@ -81,6 +81,7 @@ def display_results(lines_with_keywords):
             show_memcpy_message()
         elif "memmove" in line_text.lower():
             show_memmove_message()
-
+        elif "SELECT" or "INSERT" or "UPDATE" or "DELETE" in line_text.lower():
+            show_dynamic_query_message()
     # Bind clicking on the text area to the on_click function
     text_area.bind("<Button-1>", on_click)

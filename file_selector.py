@@ -72,8 +72,28 @@ def detect_buffer_overflow(content):
     return vulnerabilities
 
 
+def detect_dynamic_query_construction(content):
+    dynamic_query_patterns = [
+        r'\bsprintf\s*\(',  # Check for sprintf usage in query construction
+        r'\bstrcat\s*\(',  # Check for strcat usage
+        r'\bstrcpy\s*\(',  # Check for strcpy usage
+        r'\bmysql_query\s*\(',  # Check for direct mysql_query calls
+        r'\bsystem\s*\(',  # Check for use of system function which may include SQL queries
+    ]
 
+    sql_keywords = ['SELECT', 'INSERT', 'UPDATE', 'DELETE']
 
+    vulnerabilities = []
+
+    for i, line in enumerate(content):
+        for pattern in dynamic_query_patterns:
+            if re.search(pattern, line):
+                # Check if SQL keywords are present, indicating query construction
+                if any(keyword in line.upper() for keyword in sql_keywords):
+                    vulnerabilities.append(
+                        (i + 1, "Potential SQL Injection (Dynamic Query Construction)", line.strip()))
+
+    return vulnerabilities
 
 # Function to select a file and display the lines containing potential security issues
 def select_file_and_display_lines():
@@ -120,6 +140,10 @@ def select_file_and_display_lines():
 
                 # safestr_issues = check_safestr_usage(content)
                 # lines_with_keywords.extend(safestr_issues)
+    
+                # Check for dynamic query construction vulnerabilities
+                dynamic_query_vulnerabilities = detect_dynamic_query_construction(content)
+                lines_with_keywords.extend(dynamic_query_vulnerabilities)
 
                 if lines_with_keywords:
                     display_results(lines_with_keywords)

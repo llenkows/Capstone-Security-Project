@@ -150,3 +150,15 @@ def show_memmove_message():
     # Make the label a clickable link
     link.bind("<Button-1>", lambda e: open_url("https://www.ctfrecipes.com/pwn/stack-exploitation/stack-buffer-overflow/dangerous-functions/memcpy"))
 
+def show_dynamic_query_message():
+    message_window = tk.Toplevel()
+    message_window.title("SQL Dynamic Query issue")
+
+    label = tk.Label(message_window, text="This code could potentially be used for SQL injection. Make sure user input is seperated from the SQL query.")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html"))
