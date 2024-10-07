@@ -162,3 +162,17 @@ def show_dynamic_query_message():
 
     # Make the label a clickable link
     link.bind("<Button-1>", lambda e: open_url("https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html"))
+
+def show_fixed_size_buffer_message():
+    message_window = tk.Toplevel()
+    message_window.title("Fixed Sized Buffer issue")
+
+    label = tk.Label(message_window, text="Using a fixed size buffer, it could lead to potential buffer overflow depending on the data size or function. "
+                                            "It is a better idea to use dynamic memory allocation to prevent this.")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/"))
