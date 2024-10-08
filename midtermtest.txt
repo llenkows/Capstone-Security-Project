@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <mysql/mysql.h>
+
+// Off-by-one vulnerability example
+void off_by_one_example() {
+    int arr[5];
+    for (int i = 0; i <= 5; i++) { // Off-by-one error: should be i < 5
+        arr[i] = i;
+    }
+}
+
+// Buffer overflow vulnerabilities
+void buffer_overflow_example() {
+    char buffer[10];
+    strcpy(buffer, "This string is too long for the buffer"); // Buffer overflow with strcpy
+    strcat(buffer, " and this makes it worse"); // Buffer overflow with strcat
+
+    // Fixed size buffer example
+    char smallBuffer[5];
+    gets(smallBuffer); // Dangerous: buffer overflow with gets
+}
+
+// Format string vulnerability example
+void format_string_example() {
+    char user_input[100];
+    printf("Enter some input: ");
+    gets(user_input); // gets() allows uncontrolled input
+    printf(user_input); // Vulnerability: no format string specified
+}
+
+// SQL Injection vulnerability example
+void sql_injection_example(char *user_input) {
+    MYSQL *conn;
+    char query[256];
+    
+    // Unsafe dynamic query construction using sprintf
+    sprintf(query, "SELECT * FROM users WHERE username = '%s'", user_input); 
+    mysql_query(conn, query); // Vulnerability: unsanitized user input
+}
+
+// Other unsafe functions
+void unsafe_functions_example() {
+    char buffer[50];
+    
+    strncpy(buffer, "This could be unsafe", sizeof(buffer)); // Use of strncpy without proper length check
+    strncat(buffer, " Adding more unsafe data", sizeof(buffer) - strlen(buffer) - 1); // Potential overflow
+    
+    memcpy(buffer, "Unsafe memcpy usage", 20); // Potential unsafe memcpy
+    memmove(buffer, "Unsafe memmove usage", 20); // Potential unsafe memmove
+}
+
+int main() {
+    char user_input[100];
+    
+    // Example usage of the functions
+    off_by_one_example();
+    buffer_overflow_example();
+    unsafe_functions_example();
+    
+    printf("Enter username for SQL query: ");
+    gets(user_input);
+    sql_injection_example(user_input);
+    
+    format_string_example();
+    
+    return 0;
+}
