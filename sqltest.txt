@@ -1,0 +1,70 @@
+import sqlite3
+
+# Connect to the database (Insecure way without isolation level)
+connection = sqlite3.connect("test.db")
+cursor = connection.cursor()
+
+# 1. Broken Authentication and SQL Injection (Improper input handling)
+def insecure_login(username, password):
+    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}';"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    if result:
+        print("Login successful!")
+    else:
+        print("Login failed!")
+
+# 2. SQL Injection vulnerability
+def insecure_get_user_data(user_id):
+    # Directly concatenating user_id to SQL query without parameterization
+    query = f"SELECT * FROM user_data WHERE user_id = {user_id};"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return result
+
+# 3. Improper Error Handling
+def insecure_data_fetch():
+    try:
+        cursor.execute("SELECT * FROM non_existing_table;")
+    except Exception as e:
+        print(f"Database error occurred: {e}")  # Printing detailed error message
+
+# 4. Privilege Escalation
+def insecure_privilege_escalation():
+    # Grants excessive privileges without restriction
+    cursor.execute("GRANT ALL ON test_db TO 'user';")
+    print("Granted all privileges to user.")
+
+# 5. Dynamic Query Construction Vulnerability
+def insecure_update_user_info(user_id, new_name):
+    # Unsafe use of dynamic string concatenation in query
+    query = "UPDATE users SET username = '" + new_name + "' WHERE id = " + str(user_id) + ";"
+    cursor.execute(query)
+    connection.commit()
+    print("User information updated.")
+
+# 6. Example Buffer Overflow via unrestrained input length in SQL (Not directly SQL-based but included for context)
+def buffer_overflow_simulation(unsafe_input):
+    query = "SELECT * FROM logs WHERE message = '" + unsafe_input + "';"
+    cursor.execute(query)
+    print("Executed buffer overflow simulation.")
+
+# Main code to run the functions with insecure data
+if __name__ == "__main__":
+    print("Running insecure login:")
+    insecure_login("admin", "' OR '1'='1")  # SQL Injection test input
+
+    print("\nFetching user data with insecure input:")
+    print(insecure_get_user_data("1 OR 1=1"))  # SQL Injection test input
+
+    print("\nRunning insecure data fetch (error handling test):")
+    insecure_data_fetch()
+
+    print("\nGranting excessive privileges (privilege escalation test):")
+    insecure_privilege_escalation()
+
+    print("\nUpdating user info with insecure query construction:")
+    insecure_update_user_info(1, "new_name'; DROP TABLE users; --")  # Dynamic Query Construction
+
+    print("\nSimulating buffer overflow:")
+    buffer_overflow_simulation("A" * 5000)  # Long string input
