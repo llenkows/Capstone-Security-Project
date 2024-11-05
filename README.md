@@ -20,10 +20,13 @@ Format String Vulnerabilities: Checks for missing format strings in functions li
 Buffer Overflow Vulnerabilities: Scans for unsafe functions.
 SQL Injection Detection: Analyzes SQL queries for unsafe constructions that may expose vulnerabilities, such as sprintf or strcat in query construction.
 
-### Dependencies
+### IEEE Standards
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+IEEE SA - P3390
+* Our project considers the impact of "User Perceived Quality of Experience (QoE) on Business Performance". Our project has a friendly user interface, and runs at a conveniently near-instantaneous speed.
+
+ISO/IEC/IEEE 29119
+* Our development follows IEEE Software Testing standards. Throughout the design process, we have rigorously tested sample files by our code, including edge cases. Our testing is also keyword-driven.
 
 ### Installing
 
@@ -32,42 +35,26 @@ SQL Injection Detection: Analyzes SQL queries for unsafe constructions that may 
 
 ### Executing program
 
-* Run the extension
+* Run the executible, a popup will open
 * Select a file to scan through the popup window
 * View and interact with detected vulnerability list
 * There will be recommendations
 
 ## Help
 
-Make sure the file you are reading is correctly labeled with the respective .c or .sql tag.
+Make sure you specify the correct language (C or SQL) for the file selector to read your file. If your C code uses embedded SQL, read the file twice, once for each language.
 
 ## Authors
 
-We are a Villanova undergraduate student team developing this project for our Senior Design Capstone.
-Contact us with our info below:
+We are an undergraduate student team at Villanova University, developing this project for our Senior Design Capstone.
 
 Layne Lenkowski
-[@Tag](https://linkedin)
 Connor Redman
 James DiBiasi
 Chiwikem Orji
 
-## Version History
-
-FINISH COMPREHENSIVE VERSION HISTORY
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is not yet licensed.
-
 ## Acknowledgments
 
 This project was developed through research and supplementation from the below resources:
-* [ChatGPT](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [TEXTBOOK NAME](https://github.com/dbader/readme-template)
+* [ChatGPT]
+* [Secure Coding in C and C++, by Robert C. Seacord, 2006]
