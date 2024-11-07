@@ -1,80 +1,69 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, scrolledtext
-import webbrowser
+from tkinter import messagebox
+from file_selector import select_file_and_display_lines
+from sql_file_selector import sql_select_file_and_display_lines
 
 
-# Function to select a file and display the lines containing the words "test" and "capstone"
-def select_file_and_display_lines():
-    file_path = filedialog.askopenfilename(title="Select a Text File", filetypes=[("Text files", "*.txt")])
+# Function to open a popup displaying the content of README.md
+def show_readme():
+    try:
+        with open("README.md", "r") as file:
+            readme_content = file.read()
+        # Create a new Toplevel window to display the README content
+        popup = tk.Toplevel()
+        popup.title("README.md")
 
-    if file_path:
-        try:
-            with open(file_path, 'r') as file:
-                content = file.readlines()
+        # Create a Text widget to display the file content
+        text_widget = tk.Text(popup, wrap='word', width=60, height=20)
+        text_widget.insert("1.0", readme_content)
+        text_widget.config(state="disabled")  # Make it read-only
+        text_widget.pack(padx=10, pady=10)
 
-                # Find lines where the words "test" or "capstone" appear
-                lines_with_keywords = []
-                for idx, line in enumerate(content):
-                    if "test" in line.lower():
-                        lines_with_keywords.append((idx + 1, "test", line.strip()))
-                    if "capstone" in line.lower():
-                        lines_with_keywords.append((idx + 1, "capstone", line.strip()))
-
-                if lines_with_keywords:
-                    display_results(lines_with_keywords)
-                else:
-                    messagebox.showinfo("Result", 'No occurrences of the words "test" or "capstone" found.')
-
-        except Exception as e:
-            messagebox.showerror("Error", f"Could not open or read the file: {e}")
+        # Add a close button
+        close_button = tk.Button(popup, text="Close", command=popup.destroy)
+        close_button.pack(pady=10)
+    except FileNotFoundError:
+        messagebox.showerror("Error", "README.md file not found.")
 
 
-# Function to open a browser to a specified URL
-def open_url(url):
-    webbrowser.open(url)
+# Create a basic GUI window
+def create_gui():
+    root = tk.Tk()
+    root.title("Security Tester")
 
+    # Variable to hold the selected mode
+    mode = tk.StringVar(value="C")
 
-# Function to display a message and a clickable link for "test"
-def show_remove_message():
-    message_window = tk.Toplevel()
-    message_window.title("Remove 'test'")
-
-    label = tk.Label(message_window, text="Please remove the word 'test' from your code.")
+    label = tk.Label(root, text="Click the button to select a text file and analyze your C code.")
     label.pack(pady=10)
 
-    link = tk.Label(message_window, text="Click here to search on Google", fg="blue", cursor="hand2")
-    link.pack(pady=5)
-
-    # Make the label a clickable link
-    link.bind("<Button-1>", lambda e: open_url("https://www.google.com"))
-
-
-# Function to display a message for "capstone"
-def show_capstone_message():
-    message_window = tk.Toplevel()
-    message_window.title("Capstone Message")
-
-    label = tk.Label(message_window, text="You've found a capstone-related line!")
+    # Label and radio buttons for mode selection
+    label = tk.Label(root, text="Choose Analysis Mode:")
     label.pack(pady=10)
 
+    c_mode_radio = tk.Radiobutton(root, text="C Mode", variable=mode, value="C")
+    sql_mode_radio = tk.Radiobutton(root, text="SQL Mode", variable=mode, value="SQL")
+    c_mode_radio.pack()
+    sql_mode_radio.pack()
 
-# Function to display results in a new window with clickable and hoverable lines
-def display_results(lines_with_keywords):
-    result_window = tk.Toplevel()
-    result_window.title("Lines Containing 'test' or 'capstone'")
+    # Function to call the appropriate function based on the selected mode
+    def select_file():
+        if mode.get() == "C":
+            select_file_and_display_lines()
+        elif mode.get() == "SQL":
+            sql_select_file_and_display_lines()
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+    # Button to select file
+    button = tk.Button(root, text="Select File", command=select_file)
+    button.pack(pady=10)
+
+    # Button to open README.md popup
+    readme_button = tk.Button(root, text="Open README.md", command=show_readme)
+    readme_button.pack(pady=10)
+
+    root.geometry("600x300")
+    root.mainloop()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-    print_hi('C Test 1')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    create_gui()
