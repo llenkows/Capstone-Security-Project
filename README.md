@@ -49,9 +49,13 @@ Make sure you specify the correct language (C or SQL) for the file selector to r
 We are an undergraduate student team at Villanova University, developing this project for our Senior Design Capstone.
 
 Layne Lenkowski
+[www.linkedin.com/in/laynelenkowski]
 Connor Redman
+[www.linkedin.com/in/connorredman]
 James DiBiasi
+[www.linkedin.com/in/jamesdibiasi]
 Chiwikem Orji
+[www.linkedin.com/in/chiwuikemorji]
 
 ## Acknowledgments
 
