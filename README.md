@@ -50,12 +50,16 @@ We are an undergraduate student team at Villanova University, developing this pr
 
 Layne Lenkowski
 [www.linkedin.com/in/laynelenkowski]
+
 Connor Redman
 [www.linkedin.com/in/connorredman]
+
 James DiBiasi
 [www.linkedin.com/in/jamesdibiasi]
+
 Chiwikem Orji
 [www.linkedin.com/in/chiwuikemorji]
+
 
 ## Acknowledgments
 
