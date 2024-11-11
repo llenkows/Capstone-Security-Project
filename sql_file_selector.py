@@ -1,15 +1,14 @@
+import re
 from tkinter import filedialog, messagebox
 from sql_result_window import sql_display_results
-import re
-import sys
 
-# Adjusted function to detect SQL Injection
+# Adjusted function to detect SQL Injection with more flexible patterns
 def detect_sql_injection(content):
     injection_patterns = [
-        r"\bSELECT\b.*\bFROM\b.*['\"].*['\"]",  # Pattern for SELECT with user input directly embedded
-        r"\bINSERT\b.*\bVALUES\b.*['\"].*['\"]",  # Pattern for INSERT with dynamic values
-        r"\bUPDATE\b.*\bSET\b.*['\"].*['\"]",  # Pattern for UPDATE with dynamic SET values
-        r"\bDELETE\b.*\bWHERE\b.*['\"].*['\"]"  # Pattern for DELETE with dynamic WHERE clause
+        r"\bSELECT\b.*\bFROM\b.*['\"].*['\"]?",  # SELECT statement with dynamic user input
+        r"\bINSERT\b.*\bVALUES\b.*['\"].*['\"]?",  # INSERT with potential user input
+        r"\bUPDATE\b.*\bSET\b.*['\"].*['\"]?",  # UPDATE with dynamic user input
+        r"\bDELETE\b.*\bWHERE\b.*['\"].*['\"]?"  # DELETE with dynamic WHERE clause
     ]
     vulnerabilities = []
 
@@ -20,14 +19,11 @@ def detect_sql_injection(content):
 
     return vulnerabilities
 
-
-# Adjusted function to detect Broken Authentication
+# Adjusted function to detect Broken Authentication with flexible matching
 def detect_broken_authentication(content):
     broken_auth_patterns = [
-        r"SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['\"]?\w*['\"]?\s*AND\s+password\s*=\s*['\"]?\w*['\"]?",
-        # Check for hardcoded or concatenated password in query
-        r"SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['\"]?\w*['\"]?\s*AND\s+password\s*=\s*['\"]?\s*.*'?"
-        # Password check that could be bypassed
+        r"SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*['\"].*['\"]?\s*AND\s+password\s*=\s*['\"].*['\"]?",  # Explicit password in query
+        r"SELECT\s+\*\s+FROM\s+users\s+WHERE\s+username\s*=\s*\w+\s*AND\s+password\s*=\s*\w+"  # Username and password in WHERE clause without explicit strings
     ]
     vulnerabilities = []
 
@@ -38,30 +34,29 @@ def detect_broken_authentication(content):
 
     return vulnerabilities
 
-
-# Adjusted function to detect Improper Error Handling
+# Adjusted function to detect Improper Error Handling with expanded pattern coverage
 def detect_improper_error_handling(content):
-    error_handling_patterns = [
-        r"Exception.*print",  # Print statement used in exception handling
-        r"Exception.*log",  # Log statement used in exception handling
-        r"except\s+Exception\s+as\s+.*\s*:\s*print"  # General pattern for printing exception message
-    ]
     vulnerabilities = []
 
+    # Loop through each line to find `except Exception` blocks
     for i, line in enumerate(content):
-        for pattern in error_handling_patterns:
-            if re.search(pattern, line, re.IGNORECASE):
-                vulnerabilities.append((i + 1, "Potential Improper Error Handling", line.strip()))
+        if re.search(r"except\s+Exception", line, re.IGNORECASE):  # Detect except block
+            if i + 1 < len(content):  # Ensure there is a line after `except`
+                next_line = content[i + 1].strip()
+                # Only add the next line if it contains `print` or `log`
+                if "print" in next_line.lower() or "log" in next_line.lower():
+                    vulnerabilities.append((i + 2, "Potential Improper Error Handling", next_line))
 
     return vulnerabilities
 
 
-# Adjusted function to detect Privilege Escalation
+
+# Adjusted function to detect Privilege Escalation with broader GRANT detection
 def detect_privilege_escalation(content):
     privilege_patterns = [
-        r"GRANT\s+ALL\s+ON\s+\w+\s+TO\s+['\"].*['\"]",  # Excessive privileges grant
-        r"GRANT\s+\w+\s+ON\s+\w+\s+TO\s+\w+\s+WITH\s+GRANT\s+OPTION",  # WITH GRANT OPTION for privilege escalation
-        r"GRANT\s+\w+\s+ON\s+.*\s+TO\s+.*"  # General pattern to detect GRANT statements
+        r"GRANT\s+ALL\s+ON\s+\w+\s+TO\s+['\"].*['\"]",  # Excessive privileges granted
+        r"GRANT\s+\w+\s+ON\s+\w+\s+TO\s+\w+\s+WITH\s+GRANT\s+OPTION",  # Privileges granted with further granting ability
+        r"GRANT\s+\w+\s+ON\s+.*\s+TO\s+.*"  # General GRANT statement pattern
     ]
     vulnerabilities = []
 
@@ -72,20 +67,27 @@ def detect_privilege_escalation(content):
 
     return vulnerabilities
 
-# Function to remove any line that appears more than once
+# Function to remove duplicates based on line number
+# Function to remove duplicates based on line number while preserving vulnerability information
 def remove_duplicates(results):
-    line_count = {}
-    for result in results:
-        line_number = result[0]
-        if line_number not in line_count:
-            line_count[line_number] = 1
+    unique_results = {}
+
+    # Loop through each result to collect unique line numbers with combined vulnerability descriptions
+    for line_num, vulnerability_type, line_text in results:
+        if line_num not in unique_results:
+            unique_results[line_num] = (line_num, vulnerability_type, line_text)
         else:
-            line_count[line_number] += 1
+            # Append additional vulnerability type to existing entry, if it's different
+            if vulnerability_type not in unique_results[line_num][1]:
+                unique_results[line_num] = (
+                    line_num,
+                    f"{unique_results[line_num][1]}, {vulnerability_type}",
+                    line_text
+                )
 
-    # Only keep results with lines that appear once
-    unique_results = [result for result in results if line_count[result[0]] == 1]
+    # Return the results as a sorted list by line number
+    return sorted(unique_results.values(), key=lambda x: x[0])
 
-    return unique_results
 
 # Testing setup
 def sql_select_file_and_display_lines():
