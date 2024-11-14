@@ -84,6 +84,28 @@ def detect_dynamic_query_construction(content):
 
     return vulnerabilities
 
+def detect_signed_to_unsigned_integer(content):
+    ##unsafe_functions = [ 'memmove', 'strncpy', strncat, read, fread, malloc, calloc, realloc, sprintf, snprintf, bcopy']
+    vulnerability = []
+    memcpy_calls = r'\bmemcpy(?:_s)?\s*\(([^)]+)\)'
+
+    for i, line in enumerate(content):
+        match = re.search(memcpy_calls, line)
+        if match:
+            params = match.group(1).split(",")
+            if len(params) >= 3:
+                Vuln = params[2].strip()
+                signed_num = re.search(rf'\b(int|signed int)\s+{re.escape(Vuln)}\b', line)
+                if signed_num:
+                    vulnerability.append({"line": i + 1, "function_call": line.strip(),
+                                          "vulnerability": "'Potential sign error vulnerability with signed-to-unsigned conversion"})
+
+    #if vulnerability:
+        #for err in vulnerability:
+            #print(f"vulnerabilty detected on line {err["line"]} with the function call:{err["function_call"]}")
+            #print(f"vulnerabilty because of :{err["vulnerability"]} ")
+    #else:
+        #print("No vulnerabilities detetcted")
 
 # Function to remove any line that appears more than once
 def remove_duplicates(results):

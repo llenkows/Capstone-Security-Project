@@ -176,3 +176,19 @@ def show_fixed_size_buffer_message():
 
     # Make the label a clickable link
     link.bind("<Button-1>", lambda e: open_url("https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/"))
+
+
+def show_signed_to_unsigned_message():
+    message_window = tk.Toplevel()
+    message_window.title("Signed to unsigned issue")
+
+    label = tk.Label(message_window,
+                     text="Using a signed number in a function could convert it into an unsigned integer which can cause potential problems.")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>",
+              lambda e: open_url("https://www.geeksforgeeks.org/difference-between-unsigned-int-and-signed-int-in-c/"))
