@@ -30,8 +30,7 @@ ISO/IEC/IEEE 29119
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+* Unzip the file folder, run the executable
 
 ### Executing program
 
