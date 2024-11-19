@@ -62,6 +62,5 @@ Chiwikem Orji
 
 ## Acknowledgments
 
-This project was developed through research and supplementation from the below resources:
-* [ChatGPT]
+This project was developed through research from the below resource:
 * [Secure Coding in C and C++, by Robert C. Seacord, 2006]
