@@ -5,10 +5,10 @@ from sql_result_window import sql_display_results
 # Adjusted function to detect SQL Injection with more flexible patterns
 def detect_sql_injection(content):
     injection_patterns = [
-        r"\bSELECT\b.*\bFROM\b.*['\"].*['\"]?",  # SELECT statement with dynamic user input
-        r"\bINSERT\b.*\bVALUES\b.*['\"].*['\"]?",  # INSERT with potential user input
-        r"\bUPDATE\b.*\bSET\b.*['\"].*['\"]?",  # UPDATE with dynamic user input
-        r"\bDELETE\b.*\bWHERE\b.*['\"].*['\"]?"  # DELETE with dynamic WHERE clause
+        r"\bSELECT\b.*\bFROM\b.*(\+|\|\||[{].*?[}]|['\"].*['\"])",  # SELECT statement with dynamic user input
+        r"\bINSERT\b.*\bVALUES\b.*(\+|\|\||[{].*?[}]|['\"].*['\"])",  # INSERT with potential user input
+        r"\bUPDATE\b.*\bSET\b.*(\+|\|\||[{].*?[}]|['\"].*['\"])",  # UPDATE with dynamic user input
+        r"\bDELETE\b.*\bWHERE\b.*(\+|\|\||[{].*?[}]|['\"].*['\"])"  # DELETE with dynamic WHERE clause
     ]
     vulnerabilities = []
 

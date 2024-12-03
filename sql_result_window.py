@@ -71,6 +71,12 @@ def sql_display_results(lines_with_keywords):
         # Check for multiple errors in the clicked line
         if "select" in line_text and "from" in line_text:
             error_functions.append(show_sql_injection_message)
+        if "insert" in line_text and "values" in line_text:
+            error_functions.append(show_sql_injection_message)
+        if "update" in line_text and "set" in line_text:
+            error_functions.append(show_sql_injection_message)
+        if "delete" in line_text and "where" in line_text:
+            error_functions.append(show_sql_injection_message)
         if "where username" in line_text and "password" in line_text:
             error_functions.append(show_broken_authentication_message)
         if "grant" in line_text:
