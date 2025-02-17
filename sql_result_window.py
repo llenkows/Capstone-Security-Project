@@ -79,11 +79,23 @@ def sql_display_results(lines_with_keywords):
             error_functions.append(show_sql_injection_message)
         if "where username" in line_text and "password" in line_text:
             error_functions.append(show_broken_authentication_message)
-        if "grant" in line_text:
+
+        # If it has grant, it was mostly likely detected as privilege escalation
+        if ("grant" in line_text
+            or "role" in line_text
+            or "admin" in line_text
+        ):
             error_functions.append(show_privilege_escalation_message)
 
         # Check for improper error handling based on line content
-        if "except exception" in line_text or ("print(" in line_text and "error occurred" in line_text):
+        if ("except" in line_text
+            or "catch" in line_text
+            or "logs." in line_text
+            or "error_message" in line_text
+            or "IS NULL" in line_text
+            or "information_schema" in line_text
+            or "@@version" in line_text
+        ):
             show_improper_error_handling_message()
             return  # Exit after opening the message for this click
 

@@ -47,6 +47,9 @@ def detect_buffer_overflow(content):
         r'\bstrcat\s*\(',
         r'\bsprintf\s*\(',
         r'\bscanf\s*\(',
+        r'\bstr_len\s*\(',
+        r'\bmemcpy\s*\(',
+        r'\bmemmove\s*\(',
     ]
 
     buffer_size_pattern = r'char\s+\w+\s*\[\s*(\d+)\s*\]'

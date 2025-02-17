@@ -192,3 +192,18 @@ def show_signed_to_unsigned_message():
     # Make the label a clickable link
     link.bind("<Button-1>",
               lambda e: open_url("https://www.geeksforgeeks.org/difference-between-unsigned-int-and-signed-int-in-c/"))
+
+def show_scanf_message():
+    message_window = tk.Toplevel()
+    message_window.title("Scanf issue")
+
+    label = tk.Label(message_window,
+                     text="Scanf doesn't have set input bounds, so overflow vulnerabilities are possible. Use a different function like fgets() or sscanf().")
+    label.pack(pady=10)
+
+    link = tk.Label(message_window, text="More information on the vulnerability.", fg="blue", cursor="hand2")
+    link.pack(pady=5)
+
+    # Make the label a clickable link
+    link.bind("<Button-1>",
+              lambda e: open_url("https://stackoverflow.com/questions/35734927/vulnerability-using-printf-scanf-and-s"))

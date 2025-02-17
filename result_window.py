@@ -4,7 +4,7 @@ from tkinter import scrolledtext
 from message_windows import (show_strncpy_message, show_strncat_message, show_strcat_message, show_strcpy_message,
                              show_strlen_message, show_strsafe_message, show_gets_message, show_off_by_one_message,
                              show_format_string_message, show_memcpy_message, show_memmove_message, show_dynamic_query_message,
-                             show_fixed_size_buffer_message)
+                             show_fixed_size_buffer_message, show_scanf_message)
 
 # Function to display results in a new window with clickable and hoverable lines
 def display_results(lines_with_keywords):
@@ -85,6 +85,8 @@ def display_results(lines_with_keywords):
             error_functions.append(show_memcpy_message)
         if "memmove" in line_text:
             error_functions.append(show_memmove_message)
+        if "scanf" in line_text:
+            error_functions.append(show_scanf_message)
         if any(keyword in line_text for keyword in ["select", "insert", "update", "delete"]):
             error_functions.append(show_dynamic_query_message)
 
